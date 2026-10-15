@@ -1,1 +1,97 @@
-
+{
+  "version": 1,
+  "author": "Gael Salinas Aranda",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "board-esp32-devkit-c-v4", "id": "esp", "top": 0, "left": 0, "attrs": {} },
+    {
+      "type": "wokwi-hc-sr04",
+      "id": "ultrasonic",
+      "top": -65.7,
+      "left": -196.1,
+      "attrs": { "distance": "25" }
+    },
+    {
+      "type": "wokwi-lcd1602",
+      "id": "lcd",
+      "top": 102.4,
+      "left": 168.8,
+      "attrs": { "pins": "i2c", "i2cAddress": "0x27" }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led1",
+      "top": 136,
+      "left": -226.6,
+      "rotate": 180,
+      "attrs": { "color": "red", "flip": "1" }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led2",
+      "top": 184,
+      "left": -226.6,
+      "rotate": 180,
+      "attrs": { "color": "red", "flip": "1" }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r1",
+      "top": 138.35,
+      "left": -288,
+      "attrs": { "value": "1000" }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r2",
+      "top": 186.35,
+      "left": -288,
+      "attrs": { "value": "1000" }
+    },
+    {
+      "type": "wokwi-pushbutton-6mm",
+      "id": "btn1",
+      "top": 237.8,
+      "left": -115.2,
+      "attrs": { "color": "green", "xray": "1" }
+    },
+    {
+      "type": "wokwi-pushbutton-6mm",
+      "id": "btn2",
+      "top": 276.2,
+      "left": -115.2,
+      "attrs": { "color": "green", "xray": "1" }
+    },
+    {
+      "type": "wokwi-pushbutton-6mm",
+      "id": "btn3",
+      "top": 314.6,
+      "left": -115.2,
+      "attrs": { "color": "green", "xray": "1" }
+    },
+    { "type": "wokwi-gnd", "id": "gnd1", "top": 364.8, "left": -144.6, "attrs": {} }
+  ],
+  "connections": [
+    [ "esp:21", "lcd:SDA", "green", [ "h33.64", "v76.6" ] ],
+    [ "esp:22", "lcd:SCL", "blue", [ "h24.04", "v114.9" ] ],
+    [ "btn2:1.l", "gnd1:GND", "black", [ "h-28.8" ] ],
+    [ "btn3:1.l", "gnd1:GND", "black", [ "h0" ] ],
+    [ "btn1:1.l", "gnd1:GND", "black", [ "h-19.2", "v134.4" ] ],
+    [ "esp:27", "ultrasonic:TRIG", "gold", [ "h0" ] ],
+    [ "esp:26", "ultrasonic:ECHO", "green", [ "h0" ] ],
+    [ "ultrasonic:GND", "esp:CMD", "black", [ "v0" ] ],
+    [ "esp:32", "btn1:2.r", "limegreen", [ "h-81.41", "v172.8" ] ],
+    [ "esp:33", "btn2:2.r", "limegreen", [ "h-52.61", "v201.6" ] ],
+    [ "ultrasonic:VCC", "esp:5V", "red", [ "v0" ] ],
+    [ "esp:25", "btn3:2.r", "limegreen", [ "v0", "h-33.41", "v230.4" ] ],
+    [ "lcd:GND", "esp:GND.2", "black", [ "h-28.8", "v-105.6" ] ],
+    [ "led1:A", "esp:14", "cyan", [ "v0" ] ],
+    [ "led2:A", "esp:12", "magenta", [ "v0", "h19.2", "v-38.4" ] ],
+    [ "led1:C", "r1:2", "black", [ "v0" ] ],
+    [ "led2:C", "r2:2", "black", [ "v0" ] ],
+    [ "r1:1", "gnd1:GND", "black", [ "v0", "h-19.2", "v192" ] ],
+    [ "r2:1", "gnd1:GND", "black", [ "v144", "h153.6" ] ],
+    [ "lcd:VCC", "esp:5V", "red", [ "h-28.8", "v86.5", "h-153.6", "v-9.6" ] ]
+  ],
+  "dependencies": {}
+}
