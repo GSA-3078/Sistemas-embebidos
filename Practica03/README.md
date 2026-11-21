@@ -74,12 +74,6 @@ Al finalizar la práctica, el estudiante será capaz de:
 
 ---
 
-# 🔌 Diagrama de conexión
-
-![Diagrama de conexión](diagrama_horno_peltier_esp32.png)
-
----
-
 ## 🌡️ DS18B20
 
 El DS18B20 utiliza el protocolo **OneWire**, por lo que solamente requiere una línea de datos para comunicarse con el ESP32.
