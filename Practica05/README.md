@@ -1,102 +1,82 @@
-# 🔥 Práctica: Horno con control de temperatura (Foco + Peltier + Extractor) con ESP32, LM35 y Potenciómetros
+# 🔥 Horno con Control de Temperatura con ESP32
 
-![ESP32](https://img.shields.io/badge/ESP32-Microcontroller-blue)
-![Arduino](https://img.shields.io/badge/Arduino-C%2FC%2B%2B-00979D)
-![PlatformIO](https://img.shields.io/badge/PlatformIO-IDE-orange)
-![Relay](https://img.shields.io/badge/M%C3%B3dulos-Rel%C3%A9-red)
+### 🌡️ Control por histéresis con LM35, potenciómetros, relés, celda Peltier y LCD 16×2 mediante I²C
 
-## 📋 Descripción
+![ESP32](https://img.shields.io/badge/ESP32-Microcontrolador-E7352C?style=for-the-badge&logo=espressif&logoColor=white)
+![PlatformIO](https://img.shields.io/badge/PlatformIO-IDE-orange?style=for-the-badge&logo=platformio&logoColor=white)
+![Arduino](https://img.shields.io/badge/Framework-Arduino-00979D?style=for-the-badge&logo=arduino&logoColor=white)
+![Relay](https://img.shields.io/badge/M%C3%B3dulos-Rel%C3%A9-red?style=for-the-badge)
+![License](https://img.shields.io/badge/Licencia-Educativa-blue?style=for-the-badge)
 
-En esta práctica se desarrolla un sistema embebido basado en **ESP32** que mantiene la temperatura de un horno dentro de un rango configurable. La temperatura se mide con un sensor analógico **LM35** y se muestra en una pantalla **LCD 16×2 con interfaz I2C**.
+## 📌 Descripción del proyecto
 
-Los límites de temperatura (**máximo y mínimo**) se ajustan en tiempo real con **dos potenciómetros**, sin necesidad de botones.
+Este proyecto consiste en desarrollar un sistema de control de temperatura para un horno utilizando una tarjeta **ESP32**, un sensor analógico **LM35**, dos potenciómetros y tres módulos de relé.
 
-El sistema alterna entre dos modos:
+La temperatura se mide con el LM35 y se mantiene entre un límite **máximo** y uno **mínimo**, que se ajustan en tiempo real con los potenciómetros. Cuando la temperatura baja al mínimo, un **foco** de 127 V CA calienta el horno. Cuando llega al máximo, se enciende una **celda Peltier** con sus dos ventiladores y un **extractor** para enfriarlo.
 
-* 🔥 **Calentando:** se enciende un **foco** (127 V CA) para subir la temperatura.
-* ❄️ **Enfriando:** se enciende una **celda Peltier** con sus dos ventiladores y un **extractor** para bajar la temperatura.
-
-Los actuadores se manejan con **módulos de relé** (sin transistores).
-
-La práctica integra:
-
-* 🌡️ Adquisición de temperatura con un sensor analógico.
-* 📈 Lectura de entradas analógicas (ADC de 12 bits).
-* 🧮 Filtro de promedio móvil.
-* 🎚️ Ajuste de parámetros con potenciómetros.
-* 📟 Comunicación **I2C**.
-* ⚡ Control de cargas de CA y CD mediante relés.
-* 🔁 Control de temperatura por histéresis (ON/OFF).
-* 🖥️ Visualización de datos en LCD y Monitor Serial.
-* ⚙️ Programación no bloqueante de ESP32 utilizando C/C++.
+Los límites, la temperatura y el modo de operación se muestran en una pantalla LCD de 16 columnas por 2 filas, utilizando el protocolo de comunicación **I²C**. Además, las lecturas se envían al monitor serie para su supervisión.
 
 > ⚠️ **ADVERTENCIA DE SEGURIDAD:** el foco trabaja con **127 V de corriente alterna** y el sistema genera **calor**. Arme y modifique el circuito siempre **desconectado**, utilice cable y portalámparas que soporten temperatura, y deje las conexiones de 127 V dentro de una caja cerrada.
 
----
+## 🎯 Objetivo general
 
-## 🎯 Objetivo
+Implementar un sistema embebido basado en ESP32 capaz de medir la temperatura de un horno con un sensor LM35 y controlarla por histéresis, activando un foco, una celda Peltier y un extractor mediante módulos de relé, con límites ajustables por potenciómetros y visualización en una pantalla LCD con comunicación I²C.
 
-Implementar un sistema de control de temperatura por histéresis utilizando un ESP32, un sensor LM35, dos potenciómetros, tres módulos de relé, una celda Peltier, un foco y una pantalla LCD 16×2 con interfaz I2C.
+### 🎓 Objetivos específicos
 
-Al finalizar la práctica, el estudiante será capaz de:
+* 🔌 Configurar entradas analógicas de la ESP32 para adquirir señales eléctricas.
+* 🌡️ Convertir el voltaje de salida del LM35 en grados Celsius.
+* 🧮 Aplicar un filtro de promedio móvil para reducir el ruido de la medición.
+* 🎚️ Ajustar los límites de temperatura mediante dos potenciómetros.
+* 🔁 Implementar un control de temperatura por histéresis.
+* ⚡ Controlar cargas de CA y CD mediante módulos de relé.
+* 🛡️ Detectar y manejar fallas del sensor de forma segura.
+* 🖥️ Implementar la comunicación I²C para visualizar los datos en una pantalla LCD.
+* 📡 Enviar las mediciones al monitor serie para su supervisión.
 
-1. Conectar un sensor LM35 al ESP32 y convertir su voltaje a grados Celsius.
-2. Leer entradas analógicas con el ADC del ESP32.
-3. Aplicar un filtro de promedio móvil para reducir el ruido de la medición.
-4. Ajustar parámetros del sistema mediante potenciómetros.
-5. Controlar cargas de CA y CD mediante módulos de relé.
-6. Implementar un control de temperatura por histéresis con un límite máximo y uno mínimo.
-7. Mostrar información en el LCD y en el Monitor Serial.
-8. Detectar y manejar fallas del sensor.
-9. Alimentar cargas de 12 V con una fuente externa a través de relés.
+## 🧰 Materiales y herramientas
 
----
+| Componente                                   | Función                                           |
+| -------------------------------------------- | ------------------------------------------------- |
+| 🔴 ESP32 DevKit V1                           | Adquisición, procesamiento y control              |
+| 🌡️ Sensor LM35                              | Medición de la temperatura del horno              |
+| 🎚️ Potenciómetro de 10 kΩ (×2)              | Ajuste de la temperatura máxima y mínima          |
+| 🖥️ LCD 16×2 con módulo I²C                  | Visualización de las variables                    |
+| ⚡ Módulo de relé de 1 canal, 5 V (×3)       | Activación de foco, Peltier y extractor           |
+| ❄️ Celda Peltier 12 V (TEC1-12706)          | Enfriamiento del horno                            |
+| 🧊 Disipador de aluminio (×2)                | Disipación del lado frío y del lado caliente      |
+| 🌀 Ventilador de 12 V para disipador (×2)    | Ventilación de los disipadores de la Peltier      |
+| 🌀 Ventilador extractor de 12 V              | Extracción del aire caliente                      |
+| 💡 Foco incandescente con portalámparas      | Calentamiento del horno                           |
+| 🔋 Fuente de 12 V CD (mínimo 8 A)            | Alimentación de la Peltier y los ventiladores     |
+| 🔌 Clavija con cable de 127 V CA             | Alimentación del foco                             |
+| 🔗 Cables y protoboard                       | Interconexión de los componentes                  |
+| 💻 Visual Studio Code                        | Entorno de desarrollo                             |
+| ⚙️ PlatformIO                                | Compilación y gestión del proyecto                |
 
-# 🔄 Cambios respecto a la práctica con DS18B20
+## 🔌 Diagrama de conexiones
 
-| Elemento                  | Versión anterior              | Esta práctica                    |
-| ------------------------- | ----------------------------- | -------------------------------- |
-| Sensor de temperatura     | DS18B20 (digital, OneWire)    | **LM35 (analógico)**             |
-| Ajuste de Max y Min       | 3 botones                     | **2 potenciómetros**             |
-| Librerías                 | OneWire, DallasTemperature    | Solo `LiquidCrystal_I2C`         |
-| Resistencia pull-up 4.7 kΩ | Necesaria                    | No se usa                        |
-| Filtro de lectura         | No                            | **Promedio móvil de 5 lecturas** |
-| Lectura del sensor        | Cada 800 ms                   | Cada 100 ms                      |
+### 📍 Asignación de pines de la ESP32
 
----
+| Dispositivo                     | Pin del dispositivo | Pin ESP32 |
+| ------------------------------- | ------------------- | --------- |
+| Sensor LM35                     | Vout                | GPIO 34   |
+| Potenciómetro de máximo         | Terminal central    | GPIO 32   |
+| Potenciómetro de mínimo         | Terminal central    | GPIO 33   |
+| Relé del foco                   | IN                  | GPIO 26   |
+| Relé de la Peltier              | IN                  | GPIO 27   |
+| Relé del extractor              | IN                  | GPIO 13   |
+| LCD I²C                         | SDA                 | GPIO 21   |
+| LCD I²C                         | SCL                 | GPIO 22   |
+| Potenciómetros                  | Extremos            | 3.3 V y GND |
+| LM35, LCD y módulos de relé     | Alimentación        | VIN (5 V) |
+| Todos los dispositivos          | Tierra              | GND común |
 
-# 🧰 Material requerido
+**⚠️ Importante:** conecta cada potenciómetro entre **3.3 V** y GND, utilizando su terminal central como salida analógica. El LM35 se alimenta con **5 V**.
 
-## Hardware
+### 🌡️ Conexión del sensor LM35
 
-| Componente                                  | Cantidad |
-| ------------------------------------------- | -------: |
-| ESP32 DevKit                                |        1 |
-| Sensor de temperatura LM35                  |        1 |
-| Potenciómetro 10 kΩ lineal                  |        2 |
-| LCD 16×2 I2C                                |        1 |
-| Módulo de relé de 1 canal (5 V)             |        3 |
-| Celda Peltier 12 V (TEC1-12706 o similar)   |        1 |
-| Disipador de aluminio                       |        2 |
-| Ventilador 12 V para disipador              |        2 |
-| Ventilador extractor 12 V                   |        1 |
-| Foco incandescente                          |        1 |
-| Portalámparas resistente al calor           |        1 |
-| Fuente de 12 V CD (mínimo 8 A)              |        1 |
-| Clavija con cable (127 V CA)                |        1 |
-| Protoboard                                  |        1 |
-| Cables Dupont y cable calibre grueso        |   Varios |
-| Cable USB                                   |        1 |
-
----
-
-# 🔌 Conexiones
-
-## 🌡️ Sensor LM35
-
-El LM35 entrega **10 mV por cada °C** en su pin de salida (Vout). Por ejemplo, 250 mV equivalen a 25 °C.
-
-Visto de frente (con la cara plana hacia usted y las patas hacia abajo):
+Visto de frente (cara plana hacia ti y patas hacia abajo):
 
 ```text
       ┌─────┐
@@ -106,24 +86,15 @@ Visto de frente (con la cara plana hacia usted y las patas hacia abajo):
        +Vs Vout GND
 ```
 
-| LM35        | ESP32          |
-| ----------- | -------------- |
-| +Vs         | VIN (5 V)      |
-| Vout        | GPIO 34        |
-| GND         | GND            |
+| LM35 | ESP32     |
+| ---- | --------- |
+| +Vs  | VIN (5 V) |
+| Vout | GPIO 34   |
+| GND  | GND       |
 
-> ⚠️ **Nota:** el LM35 se alimenta con **5 V**. Con 3.3 V trabaja fuera de su rango recomendado y la medición no es confiable. Con 5 V su salida llega como máximo a 1.5 V (150 °C), que es un voltaje seguro para el ADC del ESP32. Opcionalmente, coloque un capacitor de 0.1 µF entre Vout y GND para reducir el ruido.
+> ⚠️ Con 3.3 V el LM35 trabaja fuera de su rango recomendado y la medición no es confiable. Con 5 V, su salida máxima de 1.5 V (150 °C) es segura para el ADC. Opcionalmente, coloca un capacitor de 0.1 µF entre Vout y GND para reducir el ruido.
 
----
-
-## 🎚️ Potenciómetros
-
-Cada potenciómetro actúa como un divisor de voltaje: sus extremos van a 3.3 V y GND, y la terminal central (cursor) va al GPIO.
-
-| Potenciómetro | Extremo 1 | Terminal central | Extremo 2 | Función                      |
-| ------------- | --------- | ---------------- | --------- | ---------------------------- |
-| POT MÁX       | 3.3 V     | GPIO 32          | GND       | Temperatura máxima (5–99 °C) |
-| POT MÍN       | 3.3 V     | GPIO 33          | GND       | Temperatura mínima (0–94 °C) |
+### 🎚️ Conexión de los potenciómetros
 
 ```text
       3.3 V
@@ -137,90 +108,44 @@ Cada potenciómetro actúa como un divisor de voltaje: sus extremos van a 3.3 V 
        GND
 ```
 
-> ⚠️ **Importante:** alimente los potenciómetros con **3.3 V** y no con 5 V. Los pines del ESP32 soportan como máximo 3.3 V.
+### ⚡ Conexión de los módulos de relé
 
----
+Los tres módulos se alimentan con 5 V (VIN) y GND, y se activan con nivel **LOW** (`LOW` = encendido, `HIGH` = apagado).
 
-## ⚡ Módulos de relé
+| Módulo de relé | Carga que controla                       |
+| -------------- | ---------------------------------------- |
+| Relé foco      | Foco (127 V CA)                          |
+| Relé Peltier   | Celda Peltier + 2 ventiladores (12 V CD) |
+| Relé extractor | Extractor (12 V CD)                      |
 
-Los tres módulos se alimentan con **5 V (VIN) y GND** del ESP32 y se activan con nivel **LOW** (`LOW` = encendido, `HIGH` = apagado).
+**Cargas de 12 V (Peltier y extractor):** los **COM de ambos relés van unidos** al positivo (+) de la fuente. Cada carga se conecta al **NO** de su relé y su negativo regresa al negativo (−) de la fuente. La Peltier y sus dos ventiladores (uno por disipador) van **en paralelo**.
 
-| Módulo de relé | Pin IN del ESP32 | Carga que controla                         |
-| -------------- | ---------------- | ------------------------------------------ |
-| Relé foco      | GPIO 26          | Foco (127 V CA)                            |
-| Relé Peltier   | GPIO 27          | Celda Peltier + 2 ventiladores (12 V CD)   |
-| Relé extractor | GPIO 13          | Extractor (12 V CD)                        |
-
-### Cargas de 12 V (Peltier y extractor)
-
-Los **COM de los relés de la Peltier y del extractor van unidos** al positivo (+) de la fuente de 12 V. Cada carga se conecta al **NO** de su relé, y su negativo regresa al negativo (−) de la fuente.
-
-| Origen                                   | Destino                                     |
-| ---------------------------------------- | ------------------------------------------- |
+| Origen                                   | Destino                                       |
+| ---------------------------------------- | --------------------------------------------- |
 | Fuente 12 V (+)                          | COM del relé Peltier y COM del relé extractor |
-| NO del relé Peltier                      | (+) de la Peltier y de sus 2 ventiladores   |
-| NO del relé extractor                    | (+) del extractor                           |
-| (−) de Peltier, ventiladores y extractor | Fuente 12 V (−)                             |
+| NO del relé Peltier                      | (+) de la Peltier y de sus 2 ventiladores     |
+| NO del relé extractor                    | (+) del extractor                             |
+| (−) de Peltier, ventiladores y extractor | Fuente 12 V (−)                               |
 
-La celda Peltier y sus **dos ventiladores** (uno por disipador: lado frío y lado caliente) van **en paralelo**, por lo que se encienden y apagan juntos con el mismo relé.
+**Foco (127 V CA):**
 
-### Foco (127 V CA)
+| Origen                         | Destino                               |
+| ------------------------------ | ------------------------------------- |
+| Clavija, fase (cable negro)    | COM del relé del foco                 |
+| NO del relé del foco           | Foco                                  |
+| Clavija, neutro (cable blanco) | Foco (directo, sin pasar por el relé) |
 
-| Origen                          | Destino                                   |
-| ------------------------------- | ----------------------------------------- |
-| Clavija, fase (cable negro)     | COM del relé del foco                     |
-| NO del relé del foco            | Foco                                      |
-| Clavija, neutro (cable blanco)  | Foco (directo, sin pasar por el relé)     |
+> ⚠️ Revisa la serigrafía de tus módulos, ya que el orden de las terminales (NO, COM, NC) puede variar entre fabricantes.
 
-> ⚠️ Revise la serigrafía de sus módulos, ya que el orden de las terminales (NO, COM, NC) puede variar entre fabricantes.
-
----
-
-## 📟 LCD 16×2 I2C
-
-El LCD utiliza el protocolo **I2C**.
-
-En el ESP32 se utilizan los pines por defecto:
-
-* **SDA → GPIO 21**
-* **SCL → GPIO 22**
-
-| LCD I2C | ESP32     |
-| ------- | --------- |
-| GND     | GND       |
-| VCC     | VIN / 5 V |
-| SDA     | GPIO 21   |
-| SCL     | GPIO 22   |
-
-> ⚠️ **Nota:** el código no define estos pines porque la librería `Wire` usa GPIO 21 (SDA) y GPIO 22 (SCL) por defecto en el ESP32.
-
----
-
-## 📍 Resumen de pines
-
-| GPIO | Función                      | Tipo              |
-| ---- | ---------------------------- | ----------------- |
-| 34   | Salida del LM35              | Entrada analógica |
-| 32   | Potenciómetro de máximo      | Entrada analógica |
-| 33   | Potenciómetro de mínimo      | Entrada analógica |
-| 26   | Relé del foco                | Salida digital    |
-| 27   | Relé de la Peltier           | Salida digital    |
-| 13   | Relé del extractor           | Salida digital    |
-| 21   | SDA (LCD)                    | I2C               |
-| 22   | SCL (LCD)                    | I2C               |
-
----
-
-# 🔗 Conexión completa
+### 🔗 Esquema general
 
 ```text
                           ESP32
                   ┌─────────────────┐
                   │                 │
                   │        GPIO 34  ├──── Vout  LM35 (+Vs a VIN, GND a GND)
-                  │                 │
-                  │        GPIO 32  ├──── Cursor POT MÁX (extremos 3V3 y GND)
-                  │        GPIO 33  ├──── Cursor POT MÍN (extremos 3V3 y GND)
+                  │        GPIO 32  ├──── Cursor POT MÁX
+                  │        GPIO 33  ├──── Cursor POT MÍN
                   │                 │
                   │        GPIO 26  ├──── IN  Relé FOCO
                   │        GPIO 27  ├──── IN  Relé PELTIER
@@ -229,12 +154,10 @@ En el ESP32 se utilizan los pines por defecto:
                   │        GPIO 21  ├──── SDA  (LCD)
                   │        GPIO 22  ├──── SCL  (LCD)
                   │                 │
-                  │            3V3  ├──── Extremos de los 2 potenciómetros
-                  │            VIN  ├──── VCC (LCD, LM35 y 3 relés)
+                  │            3V3  ├──── Extremos de los potenciómetros
+                  │            VIN  ├──── VCC (LCD, LM35 y relés)
                   │            GND  ├──── GND (todo)
                   └─────────────────┘
-
-  Lado de potencia (los relés solo conmutan estas cargas):
 
   Clavija 127 V CA ──► [Relé FOCO] ──────────► FOCO
 
@@ -243,38 +166,155 @@ En el ESP32 se utilizan los pines por defecto:
   Fuente 12 V (−) ◄───────────────────────────────────────────────────┘
 ```
 
----
+## ⚙️ Fundamento teórico
 
-# 📚 Librerías
+### 1. 🎚️ Conversión analógica a digital
 
-## Arduino IDE
+La ESP32 utiliza su convertidor analógico-digital (ADC) para leer el LM35 y los potenciómetros. Con una resolución de 12 bits, las lecturas están entre 0 y 4095.
 
-Instalar desde el **Administrador de Bibliotecas**:
+$$
+V_{\text{in}}=\frac{ADC}{4095}\,V_{\text{ref}}
+$$
 
-* `LiquidCrystal_I2C`
-* `Wire` (incluida por defecto)
+Donde:
 
-## PlatformIO
+* \(V_{\text{in}}\): voltaje estimado de entrada.
+* \(ADC\): lectura digital obtenida.
+* \(V_{\text{ref}}\): voltaje de referencia nominal (3.3 V).
 
-En el archivo `platformio.ini`:
+**Nota:** el programa usa `analogReadMilliVolts()`, que aplica la calibración de fábrica del ESP32 y reduce el error de la conversión nominal.
 
-```ini
-[env:esp32dev]
-platform = espressif32
-board = esp32dev
-framework = arduino
+### 2. 🌡️ Medición de temperatura con LM35
 
-monitor_speed = 9600
+El LM35 entrega una salida lineal de **10 mV por cada grado Celsius**:
 
-lib_deps =
-    marcoschwartz/LiquidCrystal_I2C
+$$
+T_{^\circ C}=\frac{V_{\text{out}}\,[\text{mV}]}{10}
+$$
+
+Ejemplo: 250 mV equivalen a 25.0 °C.
+
+### 3. 🧮 Filtro de promedio móvil
+
+Para reducir el ruido del ADC, el programa promedia las últimas cinco lecturas, tomadas cada 100 ms:
+
+$$
+T_{\text{filtrada}}=\frac{T_k+T_{k-1}+T_{k-2}+T_{k-3}+T_{k-4}}{5}
+$$
+
+En la primera lectura, las cinco variables se llenan con el mismo valor para evitar promediar ceros.
+
+### 4. 🎚️ Ajuste de los límites con potenciómetros
+
+La función `map()` convierte la lectura del ADC en grados:
+
+| Potenciómetro | Lectura ADC | Temperatura |
+| ------------- | ----------- | ----------- |
+| Máximo        | 0 – 4095    | 5 – 99 °C   |
+| Mínimo        | 0 – 4095    | 0 – 94 °C   |
+
+El programa mantiene siempre una diferencia mínima de **5 °C** entre ambos límites:
+
+$$
+T_{max}\geq T_{min}+5
+$$
+
+### 5. 🔁 Control por histéresis
+
+El sistema alterna entre dos modos y mantiene el actual mientras la temperatura esté entre los límites:
+
+```text
+Temperatura
+    ▲
+Max ├─ ─ ─ ─ ─ ─ ─ ┌──────┐ ─ ─ ─  ← Al llegar a Max: apaga foco, enciende Peltier
+    │            ╱         ╲
+    │          ╱             ╲
+Min ├─ ─ ─ ─ ╱─ ─ ─ ─ ─ ─ ─ ─ ╲ ─ ─  ← Al llegar a Min: apaga Peltier, enciende foco
+    │      ╱
+    └──────────────────────────────► Tiempo
+      CALOR      FRÍO       CALOR
 ```
 
-> En PlatformIO agregue `#include <Arduino.h>` como primera línea de `src/main.cpp`.
+* Si \(T \geq T_{max}\) mientras calienta, cambia a **Frío**.
+* Si \(T \leq T_{min}\) mientras enfría, cambia a **Calor**.
 
----
+Esto evita que los relés se enciendan y apaguen constantemente.
 
-# 💻 Código
+### 6. 📊 Porcentaje de avance
+
+La segunda línea de la LCD muestra qué tan cerca está la temperatura del rango:
+
+$$
+P=\frac{T-T_{min}}{T_{max}-T_{min}}\times 100
+$$
+
+El resultado se limita entre 0 % y 100 %.
+
+### 7. ⚡ Estados del sistema
+
+Los relés se activan con `LOW`.
+
+| Estado                    | Foco | Peltier + ventiladores | Extractor          |
+| ------------------------- | :--: | :--------------------: | :----------------: |
+| Leyendo sensor (inicio)   | OFF  | OFF                    | sin cambio         |
+| **Calentando** (`Calor`)  | ON   | OFF                    | OFF                |
+| **Enfriando** (`Frio`)    | OFF  | ON                     | ON                 |
+| Pausa entre cambios (1 s) | OFF  | OFF                    | conserva el último |
+| **Error de sensor**       | OFF  | OFF                    | ON                 |
+
+La pausa de 1 s evita que el foco y la Peltier funcionen al mismo tiempo al cambiar de modo. Si el voltaje del LM35 supera 1.5 V (150 °C), se detecta una falla, se apagan el foco y la Peltier, y se enciende el extractor por seguridad.
+
+## 🖥️ Visualización de datos
+
+La pantalla LCD muestra los límites configurados, la temperatura medida, el porcentaje y el modo actual.
+
+Calentando:
+
+```text
+┌────────────────┐
+│Max:60 Min:30   │
+│45.0C 50% Calor │
+└────────────────┘
+```
+
+Enfriando:
+
+```text
+┌────────────────┐
+│Max:60 Min:30   │
+│58.5C 95% Frio  │
+└────────────────┘
+```
+
+Al iniciar o si falla el sensor:
+
+```text
+┌────────────────┐      ┌────────────────┐
+│Max:60 Min:30   │      │Max:60 Min:30   │
+│Leyendo LM35    │      │Error LM35      │
+└────────────────┘      └────────────────┘
+```
+
+Las lecturas también se envían al monitor serie a **9600 baudios**:
+
+```text
+LM35: 25.3 C | Filtrada: 25.1 C | Max: 60 | Min: 30
+LM35: 25.4 C | Filtrada: 25.2 C | Max: 60 | Min: 30
+```
+
+### 📊 Variables monitoreadas
+
+| Variable                | Unidad | Origen                 |
+| ----------------------- | ------ | ---------------------- |
+| Temperatura medida      | °C     | GPIO 34 (LM35)         |
+| Temperatura filtrada    | °C     | Cálculo (promedio de 5) |
+| Temperatura máxima      | °C     | GPIO 32 (potenciómetro) |
+| Temperatura mínima      | °C     | GPIO 33 (potenciómetro) |
+| Porcentaje de avance    | %      | Cálculo                |
+
+*Los valores mostrados son únicamente ejemplos; no representan mediciones experimentales.*
+
+## 💻 Código
 
 Archivo:
 
@@ -624,163 +664,59 @@ void loop() {
 }
 ```
 
----
+## 🚀 Instalación y ejecución
 
-# ⚙️ Funcionamiento del código
+### 1. 💻 Preparar el entorno
 
-## Conversión del LM35
+Instala las siguientes herramientas:
 
-```text
-Temperatura (°C) = Voltaje (mV) / 10
+* [Visual Studio Code](https://code.visualstudio.com/)
+* [Extensión PlatformIO IDE](https://platformio.org/install/ide?install=vscode)
+
+### 2. 📁 Crear el proyecto
+
+En PlatformIO:
+
+1. Selecciona **New Project**.
+2. Elige la tarjeta **ESP32 DevKit V1** (`esp32dev`).
+3. Selecciona el framework **Arduino**.
+4. Define el nombre del proyecto.
+5. Espera a que se genere la estructura de archivos.
+
+### 3. 📦 Instalar la biblioteca LCD
+
+Agrega la siguiente dependencia en `platformio.ini`:
+
+```ini
+[env:esp32dev]
+platform = espressif32
+board = esp32dev
+framework = arduino
+monitor_speed = 9600
+
+lib_deps =
+    marcoschwartz/LiquidCrystal_I2C
 ```
 
-Ejemplo: si `analogReadMilliVolts()` entrega 250 mV, la temperatura es 25.0 °C.
+> La biblioteca `Wire` ya viene incluida con el framework, por lo que no se agrega.
 
-## Filtro de promedio móvil
+### 4. 📝 Agregar el programa
 
-El ADC del ESP32 tiene ruido, por lo que el código promedia las **últimas 5 lecturas** (una cada 100 ms):
+Copia el código del sistema en `src/main.cpp` y agrega `#include <Arduino.h>` como primera línea.
 
-```text
-Temperatura filtrada = (T0 + T1 + T2 + T3 + T4) / 5
-```
+### 5. 🔧 Armar y probar el circuito
 
-En la primera lectura, las cinco variables se llenan con el mismo valor para no promediar ceros.
+1. Arma primero el lado de baja tensión: ESP32, LM35, potenciómetros, LCD y entradas de los relés.
+2. Conecta los 12 V: fuente a los COM de Peltier y extractor, cargas a los NO y negativos a la fuente.
+3. Conecta el foco con la clavija **desconectada**.
+4. Coloca el LM35 dentro del horno, sin que toque el foco ni la Peltier directamente.
+5. Carga el código y conecta el ESP32 por USB.
+6. Verifica la LCD y gira los potenciómetros para comprobar los límites.
+7. Conecta la fuente de 12 V y, por último, la clavija del foco.
 
-## Ajuste con potenciómetros
+## 🔎 Dirección I²C del LCD
 
-La función `map()` convierte la lectura del ADC (0–4095) a grados:
-
-| Potenciómetro | Lectura ADC | Temperatura |
-| ------------- | ----------- | ----------- |
-| POT MÁX       | 0 – 4095    | 5 – 99 °C   |
-| POT MÍN       | 0 – 4095    | 0 – 94 °C   |
-
-Después, el código **protege el margen**: `tempMax` siempre será al menos 5 °C mayor que `tempMin`.
-
-## Estados del sistema
-
-Los relés se activan con `LOW`.
-
-| Estado                        | Foco | Peltier + ventiladores | Extractor          |
-| ----------------------------- | :--: | :--------------------: | :----------------: |
-| Leyendo sensor (inicio)       | OFF  | OFF                    | sin cambio         |
-| **Calentando** (`Calor`)      | ON   | OFF                    | OFF                |
-| **Enfriando** (`Frio`)        | OFF  | ON                     | ON                 |
-| Pausa entre cambios (1 s)     | OFF  | OFF                    | conserva el último |
-| **Error de sensor**           | OFF  | OFF                    | ON                 |
-
-## Control por histéresis
-
-```text
-Temperatura
-    ▲
-Max ├─ ─ ─ ─ ─ ─ ─ ┌──────┐ ─ ─ ─  ← Al llegar a Max: apaga foco, enciende Peltier
-    │            ╱         ╲
-    │          ╱             ╲
-Min ├─ ─ ─ ─ ╱─ ─ ─ ─ ─ ─ ─ ─ ╲ ─ ─  ← Al llegar a Min: apaga Peltier, enciende foco
-    │      ╱
-    └──────────────────────────────► Tiempo
-      CALOR      FRÍO       CALOR
-```
-
-* Si `tempActual >= tempMax` mientras calienta → cambia a **Frío**.
-* Si `tempActual <= tempMin` mientras enfría → cambia a **Calor**.
-* Entre ambos valores se mantiene el modo actual, lo que evita encender y apagar los relés constantemente.
-
-## Partes importantes del código
-
-| Parte del código                     | Función                                                                   |
-| ------------------------------------ | ------------------------------------------------------------------------- |
-| `analogReadResolution(12)`           | Configura el ADC a 12 bits (0–4095)                                       |
-| `analogReadMilliVolts(PIN_LM35)`     | Lee el voltaje en mV con la calibración del ESP32                         |
-| `intervaloSensor = 100`              | Lee el sensor cada 100 ms                                                 |
-| `milivoltios > 1500`                 | Si el voltaje supera 1.5 V (150 °C) se considera falla del sensor         |
-| `margen = 5`                         | Diferencia mínima de 5 °C entre Max y Min                                 |
-| `pausaCambio = 1000`                 | Pausa de 1 s con foco y Peltier apagados al cambiar de modo               |
-| `porcentaje`                         | Avance de la temperatura entre Min y Max (0–100 %)                        |
-| `intervaloLCD = 300`                 | Actualiza la pantalla cada 300 ms sin parpadeo                            |
-
----
-
-# 🖥️ Resultado esperado
-
-## LCD
-
-Calentando:
-
-```text
-┌────────────────┐
-│Max:60 Min:30   │
-│45.0C 50% Calor │
-└────────────────┘
-```
-
-Enfriando:
-
-```text
-┌────────────────┐
-│Max:60 Min:30   │
-│58.5C 95% Frio  │
-└────────────────┘
-```
-
-Al iniciar:
-
-```text
-┌────────────────┐
-│Max:60 Min:30   │
-│Leyendo LM35    │
-└────────────────┘
-```
-
-Si falla el sensor:
-
-```text
-┌────────────────┐
-│Max:60 Min:30   │
-│Error LM35      │
-└────────────────┘
-```
-
-## Monitor Serial (9600 baudios)
-
-```text
-LM35: 25.3 C | Filtrada: 25.1 C | Max: 60 | Min: 30
-LM35: 25.4 C | Filtrada: 25.2 C | Max: 60 | Min: 30
-LM35: 25.4 C | Filtrada: 25.3 C | Max: 60 | Min: 30
-```
-
----
-
-# 🛠️ Procedimiento
-
-1. Arme primero el lado de baja tensión: ESP32, LM35, potenciómetros, LCD y entradas de los relés.
-2. Conecte los **12 V**: fuente a los COM de Peltier y extractor, cargas a los NO y negativos a la fuente.
-3. Conecte el **foco** con la clavija **desconectada**.
-4. Coloque el LM35 dentro del horno, sin que toque el foco ni la Peltier directamente.
-5. Cargue el código al ESP32.
-6. Conecte el ESP32 por USB y verifique que la LCD muestre la temperatura.
-7. Gire los potenciómetros y confirme que Max y Min cambien en la pantalla.
-8. Conecte la fuente de 12 V y por último la clavija del foco.
-9. Observe el cambio entre `Calor` y `Frio` al llegar a los límites.
-
----
-
-# 🔎 Dirección I2C del LCD
-
-La dirección más común de los módulos LCD I2C es:
-
-```cpp
-0x27
-```
-
-Sin embargo, algunos módulos pueden utilizar:
-
-```cpp
-0x3F
-```
-
-Si el LCD está correctamente conectado pero no muestra información, pruebe cambiar:
+La dirección más común de los módulos LCD I²C es `0x27`, aunque algunos usan `0x3F`. Si el LCD está conectado pero no muestra información, cambia:
 
 ```cpp
 LiquidCrystal_I2C lcd(0x27, 16, 2);
@@ -792,11 +728,7 @@ por:
 LiquidCrystal_I2C lcd(0x3F, 16, 2);
 ```
 
----
-
-# 🔍 Escáner I2C
-
-Para identificar automáticamente la dirección del LCD se puede utilizar el siguiente programa:
+Para identificarla automáticamente, usa este escáner I²C:
 
 ```cpp
 #include <Arduino.h>
@@ -833,244 +765,69 @@ void loop()
 }
 ```
 
-Ejemplo de resultado:
+## 🧪 Pruebas de funcionamiento
 
-```text
-Escaner I2C
+| Prueba | Acción                                      | Resultado esperado                                         |
+| ------ | ------------------------------------------- | ---------------------------------------------------------- |
+| 1️⃣    | Girar el potenciómetro de máximo            | Cambia `Max` en la LCD (5 a 99)                            |
+| 2️⃣    | Girar el potenciómetro de mínimo            | Cambia `Min` en la LCD (0 a 94)                            |
+| 3️⃣    | Acercar Max y Min a menos de 5 °C           | Se mantiene una diferencia de 5 °C entre ambos             |
+| 4️⃣    | Calentar el LM35 con la mano                | Aumenta la temperatura mostrada                            |
+| 5️⃣    | Temperatura menor que Max                   | Modo `Calor`: foco encendido                               |
+| 6️⃣    | Temperatura igual o mayor que Max           | Pausa de 1 s y modo `Frio`: Peltier y extractor encendidos |
+| 7️⃣    | Temperatura igual o menor que Min           | Pausa de 1 s y regreso al modo `Calor`                     |
+| 8️⃣    | Desconectar el pin de salida del LM35       | Puede aparecer `Error LM35` y se enciende el extractor     |
+| 9️⃣    | Abrir el monitor serie a 9600 baudios       | Se muestran las mediciones cada 100 ms                     |
 
-Dispositivo encontrado en 0x27
-```
+## 🛠️ Solución de problemas
 
----
+| Problema                              | Posible causa                                     | Solución                                                  |
+| ------------------------------------- | ------------------------------------------------- | --------------------------------------------------------- |
+| LCD sin texto                         | Dirección I²C incorrecta                          | Verificar si la dirección es `0x27` o `0x3F`              |
+| LCD con cuadros                       | Contraste mal ajustado                            | Girar el potenciómetro del módulo I²C                     |
+| Aparece `Error LM35`                  | Voltaje de salida mayor a 1.5 V                   | Revisar conexiones del LM35                               |
+| Temperatura muy alta o muy baja       | +Vs y GND del LM35 invertidos                     | Verificar el pinout con la cara plana hacia ti            |
+| Temperatura inestable                 | Ruido en el ADC o cable largo                     | Agregar capacitor de 0.1 µF y acortar el cable            |
+| Max o Min cambian solos ±1            | Ruido del ADC en los potenciómetros               | Promediar la lectura de los potenciómetros                |
+| El potenciómetro no cambia el valor   | Cursor mal conectado                              | Cursor al GPIO y extremos a 3.3 V y GND                   |
+| El valor se mueve al revés            | Extremos del potenciómetro invertidos             | Intercambiar 3.3 V y GND                                  |
+| Los relés funcionan al revés          | El módulo se activa con HIGH                      | Invertir `HIGH` y `LOW` en el código                      |
+| El foco no enciende                   | Conexión incorrecta COM/NO o neutro               | Revisar el relé y que el neutro llegue directo al foco    |
+| La Peltier no enfría                  | Fuente, COM o polaridad incorrectos               | Revisar los 12 V, el COM unido y invertir cables si hace falta |
+| Se reinicia el ESP32 al activar relés | Fuente insuficiente o GND no común                | Revisar alimentación y unir las tierras                   |
+| No aparece información serie          | Puerto o velocidad incorrectos                    | Configurar 9600 baudios                                   |
+| No compila el proyecto                | Biblioteca ausente o falta `Arduino.h`            | Revisar `platformio.ini` y agregar `#include <Arduino.h>` |
 
-# ⚠️ Notas importantes
+## ⚠️ Notas importantes
 
-| Tema                    | Descripción                                                                                                                                      |
-| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Lógica de los relés     | El código está hecho para módulos que se activan con **LOW**. Si los suyos se activan con HIGH, invierta los niveles.                            |
-| Alimentación del LM35   | Debe ir a **5 V (VIN)**. Con 3.3 V la medición no es confiable.                                                                                  |
-| Alimentación de los pots | Extremos a **3.3 V** y GND. Nunca a 5 V, porque dañaría el pin del ESP32.                                                                       |
-| Pines analógicos        | GPIO 32, 33 y 34 pertenecen al ADC1, que funciona sin problemas aunque se use WiFi.                                                              |
-| Precisión del ADC       | El ADC del ESP32 no es perfectamente lineal. Compare con un termómetro y ajuste la lectura si es necesario.                                     |
-| Cable del sensor        | Un cable largo capta ruido. Use cable corto o blindado, y el capacitor de 0.1 µF recomendado.                                                    |
-| Corriente de la fuente  | Una Peltier TEC1-12706 puede consumir hasta unos 6 A, más 3 ventiladores. Use una fuente de **12 V de 8 A o más**.                               |
-| Contactos del relé      | Verifique que los contactos del módulo soporten la corriente de la Peltier (los SRD-05VDC son de 10 A).                                          |
-| Disipación              | El lado caliente de la Peltier **siempre** debe tener disipador y ventilador. Si falla, la celda se sobrecalienta y se daña rápidamente.         |
-| Polaridad de la Peltier | Si el lado que calienta queda hacia el interior del horno, invierta los cables de la celda (rojo = +, negro = −).                                |
-| Temperatura del sensor  | El LM35 en encapsulado TO-92 soporta aproximadamente hasta 100–150 °C según el modelo. No configure `tempMax` por encima de lo que soporta.      |
-| Aislamiento             | El foco y su portalámparas deben soportar el calor del horno; mantenga los cables de 127 V lejos de las partes calientes.                        |
-| Seguridad               | Trabaje siempre desconectado y deje las conexiones de 127 V dentro de una caja cerrada.                                                          |
+* **Lógica de los relés:** el código está hecho para módulos que se activan con **LOW**.
+* **Corriente de la fuente:** una Peltier TEC1-12706 puede consumir hasta unos 6 A, más tres ventiladores. Usa una fuente de **12 V de 8 A o más** y verifica que los contactos del relé soporten esa corriente.
+* **Disipación:** el lado caliente de la Peltier **siempre** debe tener disipador y ventilador. Si falla, la celda se sobrecalienta y se daña rápidamente.
+* **Polaridad de la Peltier:** si el lado que calienta queda hacia el interior del horno, invierte los cables de la celda.
+* **Límite del sensor:** el LM35 soporta aproximadamente entre 100 y 150 °C según el modelo. No configures `tempMax` por encima de lo que soporta.
+* **Precisión:** el ADC del ESP32 no es perfectamente lineal. Compara con un termómetro de referencia y calibra si es necesario.
+* **Aislamiento:** el foco y su portalámparas deben soportar el calor, y los cables de 127 V deben mantenerse lejos de las partes calientes.
 
----
+## 📚 Competencias desarrolladas
 
-# ⚠️ Problemas frecuentes
+* ⚡ Electrónica analógica y divisores de voltaje.
+* 🔌 Configuración de entradas ADC en microcontroladores.
+* 🌡️ Instrumentación y medición de temperatura.
+* 🧮 Filtrado digital de señales.
+* 🔁 Control por histéresis.
+* ⚡ Control de cargas mediante relés.
+* 🔗 Comunicación serial e interfaz I²C.
+* ⏱️ Programación no bloqueante con `millis()`.
+* 🛡️ Manejo de fallas y seguridad del sistema.
+* 💻 Programación de sistemas embebidos en C++.
 
-| Problema                                   | Posible solución                                                        |
-| ------------------------------------------ | ----------------------------------------------------------------------- |
-| LCD no muestra nada                        | Verificar alimentación y conexiones SDA/SCL                             |
-| LCD iluminado pero sin texto               | Revisar dirección I2C (`0x27` o `0x3F`)                                 |
-| LCD muestra cuadros                        | Ajustar el contraste con el potenciómetro del módulo                    |
-| Aparece `Error LM35`                       | Revisar conexiones del LM35; el voltaje de salida pasó de 1.5 V         |
-| Temperatura muy alta o muy baja            | Revisar que +Vs y GND del LM35 no estén invertidos                      |
-| La temperatura fluctúa mucho               | Agregar capacitor de 0.1 µF, acortar el cable o aumentar el filtro      |
-| Max o Min cambian solos ±1                 | Ruido del ADC; agregar un promedio a la lectura de los potenciómetros   |
-| Al girar un pot no cambia el valor         | Revisar que el cursor (centro) vaya al GPIO y los extremos a 3V3 y GND  |
-| El valor se mueve al revés                 | Invierta los extremos del potenciómetro                                 |
-| Los relés funcionan al revés               | Su módulo se activa con HIGH; invierta `HIGH` y `LOW` en el código      |
-| El foco no enciende                        | Revisar COM/NO del relé y que el neutro llegue directo al foco          |
-| La Peltier no enfría                       | Revisar la fuente de 12 V, el COM unido y la polaridad                  |
-| Se reinicia el ESP32 al activar un relé    | Fuente insuficiente o GND no común; revisar alimentación                |
-| El extractor se queda encendido            | Está en modo Frío o hay error de sensor (se enciende por seguridad)     |
+## 🔮 Posibles mejoras
 
----
-
-# 🧠 Conceptos aprendidos
-
-### Sensor analógico → ADC
-
-```text
-LM35 ──► Voltaje (10 mV/°C) ──► ADC 12 bits ──► mV ──► °C
-```
-
-### Filtrado de señales
-
-El promedio móvil suaviza el ruido de la lectura: mientras más muestras se promedian, más estable es la medición, pero más lenta es su respuesta.
-
-### Divisor de voltaje con potenciómetro
-
-```text
-3.3 V ──┐
-        │
-      [Pot]──── Cursor ──► ADC (0 a 3.3 V → 0 a 4095)
-        │
-GND ────┘
-```
-
-### Control por histéresis (ON/OFF)
-
-```text
-SENSOR ──► ESP32 ──► ¿T ≥ Max? ──► Enfriar
-                 └─► ¿T ≤ Min? ──► Calentar
-```
-
-### Control de cargas con relés
-
-```text
-ESP32 (3.3 V, GPIO) ──► Módulo de relé (aislado) ──► Carga de 12 V CD o 127 V CA
-```
-
-### Lectura no bloqueante
-
-El programa no usa `delay()`. Utiliza `millis()` para leer el sensor, refrescar la LCD y manejar la pausa de seguridad al mismo tiempo, sin que una tarea detenga a las demás.
-
-### Efecto Peltier
-
-```text
-Corriente ──► Peltier ──► Un lado se enfría ❄️  / El otro lado se calienta 🔥
-```
-
-El lado caliente necesita disipador y ventilador para evacuar el calor.
-
-Por lo tanto:
-
-```text
-     VARIABLE FÍSICA
-      Temperatura
-           │
-           ▼
-         LM35
-           │
-      Voltaje analógico
-           ▼
-         ESP32 ◄──── Potenciómetros (Max / Min)
-           │
-     ┌─────┼───────────┐
-     │     │           │
-    I2C  Relé foco   Relés Peltier / Extractor
-     │     │           │
-     ▼     ▼           ▼
-    LCD   Calor        Frío
-```
-
----
-
-# 📊 Flujo del programa
-
-```text
-        INICIO
-           │
-           ▼
-  Configurar pines y relés (OFF)
-           │
-           ▼
-   Configurar ADC y LCD
-           │
-           ▼
-  ┌──► Leer potenciómetros → Max y Min
-  │        │
-  │        ▼
-  │   Aplicar margen mínimo de 5 °C
-  │        │
-  │        ▼
-  │   ¿Pasaron 100 ms?
-  │        │ SÍ
-  │        ▼
-  │   Leer LM35 (mV)
-  │        │
-  │    ┌───┴─────────────┐
-  │    │                 │
-  │  ¿Voltaje          Voltaje
-  │  > 1500 mV?         válido
-  │    │ SÍ              │
-  │    ▼                 ▼
-  │  ERROR:         Filtro de promedio (5)
-  │  foco y Peltier      │
-  │  OFF, extractor      ▼
-  │  ON             Calcular %
-  │    │                 │
-  │    │            ¿T ≥ Max → FRÍO?
-  │    │            ¿T ≤ Min → CALOR?
-  │    └────────┬────────┘
-  │             ▼
-  │     ¿En pausa (1 s)?
-  │      SÍ → Foco y Peltier OFF
-  │      NO → Aplicar estado (Calor / Frío)
-  │             │
-  │             ▼
-  │      Actualizar LCD (300 ms)
-  │             │
-  └─────────────┘
-```
-
----
-
-# 📝 Actividad para el estudiante
-
-Modifique el programa para implementar las siguientes funciones:
-
-### Nivel 1 — Básico
-
-1. Cambiar el margen mínimo entre Max y Min (`margen`).
-2. Cambiar el intervalo de lectura del sensor (`intervaloSensor`).
-3. Modificar el filtro para promediar 10 lecturas en lugar de 5.
-
-### Nivel 2 — Intermedio
-
-4. Calibrar el LM35 comparándolo con un termómetro y agregar un valor de corrección (offset).
-5. Agregar un filtro de promedio a la lectura de los potenciómetros para que Max y Min no fluctúen.
-6. Agregar un LED que indique el modo (rojo = Calor, azul = Frío) y un buzzer que suene en caso de error.
-
-### Nivel 3 — Integración
-
-7. Guardar `tempMax` y `tempMin` en memoria (`Preferences`) para recuperarlos al reiniciar.
-8. Agregar un temporizador que apague el sistema después de un tiempo configurable.
-9. Reemplazar la histéresis por un control **PID** con salida PWM para la Peltier (con un módulo de potencia adecuado en lugar del relé).
-10. Graficar la temperatura medida y la filtrada en el Serial Plotter.
-
----
-
-# 📈 Extensión: Sistema de control avanzado
-
-Como extensión de la práctica, el sistema puede evolucionar de un control **ON/OFF** a un control **proporcional**:
-
-```text
-              LM35
-                 │
-                 ▼
-            ESP32 (PID)
-                 │
-        ┌────────┴────────┐
-        │                 │
-        ▼                 ▼
-      LCD            Salida PWM
-                          │
-                   ┌──────┴──────┐
-                   ▼             ▼
-                Calentador     Peltier
-```
-
-Esto permite posteriormente implementar aplicaciones de:
-
-* 🌡️ Incubadoras
-* 🔥 Hornos de secado
-* ❄️ Mini refrigeradores
-* 🧪 Cámaras de temperatura controlada
-* 🏠 Automatización del hogar
-
----
-
-# 📌 Competencias desarrolladas
-
-* Programación de microcontroladores.
-* Adquisición de variables físicas con sensores analógicos.
-* Uso del convertidor analógico-digital (ADC).
-* Filtrado digital de señales.
-* Comunicación I2C.
-* Control de actuadores mediante relés.
-* Control por histéresis.
-* Programación no bloqueante con `millis()`.
-* Manejo de errores y seguridad del sistema.
-* Manejo de displays.
-* Programación C/C++.
-* Seguridad en instalaciones eléctricas.
-* Integración sensor–controlador–actuador–interfaz.
+* 📈 Graficar la temperatura medida y la filtrada en el Serial Plotter.
+* 🎛️ Reemplazar la histéresis por un control PID con salida PWM.
+* 💾 Guardar `tempMax` y `tempMin` en memoria (`Preferences`) para recuperarlos al reiniciar.
+* 🚨 Agregar un LED y un buzzer para indicar el modo y las alarmas.
+* ⏲️ Incorporar un temporizador que apague el sistema después de un tiempo configurable.
+* 📏 Calibrar el LM35 con un termómetro de referencia (offset).
+* 📲 Transmitir las mediciones por Bluetooth o Wi-Fi.
+* 💾 Registrar las lecturas en archivos CSV.
