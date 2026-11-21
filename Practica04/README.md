@@ -63,12 +63,6 @@ Al finalizar la práctica, el estudiante será capaz de:
 
 ---
 
-# 🔌 Diagrama de conexión
-
-![Diagrama de conexión](diagrama_dimmer_servo_esp32.png)
-
----
-
 ## 🔘 Botones
 
 Los botones se configuran con `INPUT_PULLUP`, por lo que un lado va al GPIO y el otro a GND. No requieren resistencias externas.
