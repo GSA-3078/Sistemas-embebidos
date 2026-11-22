@@ -1,1 +1,102 @@
-
+{
+  "version": 1,
+  "author": "Gael Salinas Aranda",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "board-esp32-devkit-c-v4", "id": "esp", "top": 0, "left": 0, "attrs": {} },
+    {
+      "type": "wokwi-lcd1602",
+      "id": "lcd",
+      "top": 102.4,
+      "left": 207.2,
+      "attrs": { "pins": "i2c", "i2cAddress": "0x27" }
+    },
+    { "type": "wokwi-gnd", "id": "gnd1", "top": 316.8, "left": -87, "attrs": {} },
+    { "type": "wokwi-relay-module", "id": "relay1", "top": -124.6, "left": 268.8, "attrs": {} },
+    { "type": "wokwi-relay-module", "id": "relay2", "top": -201.4, "left": 268.8, "attrs": {} },
+    { "type": "wokwi-relay-module", "id": "relay3", "top": -287.8, "left": 268.8, "attrs": {} },
+    { "type": "wokwi-vcc", "id": "vcc1", "top": -335.24, "left": 144, "attrs": {} },
+    { "type": "wokwi-gnd", "id": "gnd2", "top": -67.2, "left": 181.8, "attrs": {} },
+    { "type": "wokwi-ds18b20", "id": "temp1", "top": 238.87, "left": -82.32, "attrs": {} },
+    {
+      "type": "wokwi-led",
+      "id": "led1",
+      "top": -205.2,
+      "left": 464.6,
+      "attrs": { "color": "red" }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r1",
+      "top": -168.85,
+      "left": 508.8,
+      "attrs": { "value": "1000" }
+    },
+    { "type": "wokwi-led", "id": "led2", "top": -291.6, "left": 455, "attrs": { "color": "red" } },
+    {
+      "type": "wokwi-led",
+      "id": "led3",
+      "top": -128.4,
+      "left": 464.6,
+      "attrs": { "color": "red" }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r2",
+      "top": -255.25,
+      "left": 508.8,
+      "attrs": { "value": "1000" }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r3",
+      "top": -92.05,
+      "left": 508.8,
+      "attrs": { "value": "1000" }
+    },
+    { "type": "wokwi-gnd", "id": "gnd3", "top": -76.8, "left": 661.8, "attrs": {} },
+    { "type": "wokwi-vcc", "id": "vcc2", "top": -373.64, "left": 403.2, "attrs": {} },
+    { "type": "wokwi-vcc", "id": "vcc3", "top": -152.84, "left": 412.8, "attrs": {} },
+    { "type": "wokwi-gnd", "id": "gnd4", "top": -144, "left": 661.8, "attrs": {} },
+    { "type": "wokwi-membrane-keypad", "id": "keypad1", "top": -280.4, "left": -340, "attrs": {} }
+  ],
+  "connections": [
+    [ "esp:21", "lcd:SDA", "green", [ "h72.04", "v76.6" ] ],
+    [ "esp:22", "lcd:SCL", "blue", [ "h62.44", "v114.9" ] ],
+    [ "lcd:GND", "esp:GND.2", "black", [ "h-28.8", "v-105.6" ] ],
+    [ "lcd:VCC", "esp:5V", "red", [ "h-28.8", "v76.9", "h-192", "v-19.2" ] ],
+    [ "relay2:VCC", "vcc1:VCC", "red", [ "h0" ] ],
+    [ "relay1:VCC", "vcc1:VCC", "red", [ "h0" ] ],
+    [ "gnd2:GND", "relay1:GND", "black", [ "v0" ] ],
+    [ "relay2:GND", "gnd2:GND", "black", [ "h0" ] ],
+    [ "relay3:GND", "gnd2:GND", "black", [ "h0" ] ],
+    [ "relay3:VCC", "vcc1:VCC", "red", [ "h0" ] ],
+    [ "temp1:GND", "gnd1:GND", "black", [ "v0" ] ],
+    [ "relay2:COM", "relay3:COM", "blue", [ "h30", "v-87.8" ] ],
+    [ "led1:C", "relay2:NO", "green", [ "v0" ] ],
+    [ "relay3:NO", "led2:C", "green", [ "h0" ] ],
+    [ "led2:A", "r2:1", "green", [ "v0" ] ],
+    [ "relay1:NO", "led3:C", "gold", [ "h0" ] ],
+    [ "led3:A", "r3:1", "green", [ "v0" ] ],
+    [ "led1:A", "r1:1", "green", [ "v0" ] ],
+    [ "r3:2", "gnd3:GND", "black", [ "h104.4" ] ],
+    [ "vcc2:VCC", "relay3:COM", "red", [ "v87.8" ] ],
+    [ "vcc3:VCC", "relay1:COM", "red", [ "v0" ] ],
+    [ "gnd4:GND", "r1:2", "black", [ "v0" ] ],
+    [ "gnd4:GND", "r2:2", "black", [ "v0" ] ],
+    [ "temp1:VCC", "esp:5V", "red", [ "v28.8", "h38.4", "v-115.2" ] ],
+    [ "temp1:DQ", "esp:34", "green", [ "v38.4", "h38.4", "v-259.2" ] ],
+    [ "esp:4", "relay1:IN", "cyan", [ "h43.24", "v-230.4" ] ],
+    [ "esp:18", "relay2:IN", "cyan", [ "h33.64", "v-268.6" ] ],
+    [ "esp:19", "relay3:IN", "cyan", [ "h24.04", "v-345.6" ] ],
+    [ "esp:13", "keypad1:R1", "green", [ "h0" ] ],
+    [ "keypad1:R2", "esp:14", "green", [ "v0" ] ],
+    [ "keypad1:R3", "esp:27", "green", [ "v0" ] ],
+    [ "keypad1:R4", "esp:26", "green", [ "v0" ] ],
+    [ "keypad1:C1", "esp:25", "green", [ "v0" ] ],
+    [ "keypad1:C2", "esp:33", "green", [ "v0" ] ],
+    [ "keypad1:C3", "esp:32", "green", [ "v0" ] ],
+    [ "keypad1:C4", "esp:23", "green", [ "v0", "h153.3", "v-86.4", "h134.4", "v67.2" ] ]
+  ],
+  "dependencies": {}
+}
