@@ -13,9 +13,9 @@
 
 Este repositorio reúne las **prácticas de la asignatura de Sistemas Embebidos**, desarrolladas con **ESP32** y programadas en **C++ con el framework Arduino** usando **PlatformIO** en Visual Studio Code.
 
-Las prácticas van de lo sencillo a lo complejo: primero se controlan cargas simples (un motor, un foco) con transistores y relés, después se construyen sistemas de control de temperatura con sensores, pantalla LCD y teclado, hasta llegar a un **control PID** de un horno.
+Las prácticas van de lo sencillo a lo complejo: primero se controlan cargas simples (un LED, un motor y un foco), después se construyen sistemas de control de nivel y de temperatura con sensores, pantalla LCD y teclado, hasta llegar a un **control PID** de un horno.
 
-Cada práctica tiene su propia carpeta con su código, su configuración de PlatformIO, su diagrama de conexiones y su documentación.
+Cada práctica tiene su propia carpeta con su código, su configuración de PlatformIO y su documentación.
 
 ```text
                     SISTEMAS EMBEBIDOS
@@ -25,10 +25,10 @@ Cada práctica tiene su propia carpeta con su código, su configuración de Plat
         │                                       │
         ▼                                       ▼
   Salidas y potencia                   Control y sensores
-  (transistor, relé)           (temperatura, nivel, teclado)
+  (LED, motor, foco, relé)       (agua, temperatura, teclado)
         │                                       │
         ▼                                       ▼
-   Motor · Foco             ON/OFF ──► P ──► PID · Dimmer
+   Cargas simples            ON/OFF ──► P ──► PID · Dimmer
 ```
 
 ---
@@ -40,7 +40,7 @@ Aplicar los fundamentos de los sistemas embebidos mediante prácticas que permit
 1. 🔌 Controlar cargas con transistores y módulos de relé.
 2. 🌡️ Leer sensores analógicos y digitales (LM35, DS18B20, PIR).
 3. 🖥️ Mostrar información en una pantalla LCD 16x2 con I2C.
-4. ⌨️ Capturar datos con botones y con un teclado matricial 4x4.
+4. ⌨️ Capturar datos con botones, potenciómetros y un teclado matricial 4x4.
 5. 💾 Guardar configuración en memoria no volátil (`Preferences`).
 6. ⚙️ Controlar servomotores y regular potencia con un dimmer.
 7. 🎛️ Implementar control ON/OFF con histéresis, proporcional (P) y PID.
@@ -58,30 +58,21 @@ Aplicar los fundamentos de los sistemas embebidos mediante prácticas que permit
 | Arduino Framework | Framework de programación |
 | Git y GitHub | Control de versiones y respaldo |
 
-> 💡 Si todavía no tienes el entorno listo, consulta la carpeta `00_Instalacion_Entorno`.
-
 ---
 
 ## 🧪 4. Lista de prácticas
 
 | # | Carpeta | Práctica | Componentes principales |
 |:-:|---|---|---|
-| 00 | `00_Instalacion_Entorno` | Instalación y configuración del entorno | VS Code, PlatformIO, GitHub |
-| 01 | `01_Motor_Transistor` | Control de un motor con transistor | Motor, transistor, 2 botones |
-| 02 | `02_Rele_Foco` | Control de un foco con relé | Relé, foco, 2 botones |
-| 03 | `03_Rele_Fisico` | Relé con el módulo físico | Módulo de relé, foco |
-| 04 | `04_Rele_2N2222` | Activación del relé con transistor 2N2222 | 2N2222, módulo de relé |
-| 05 | `05_Control_Nivel_Bombas` | Control de nivel con bombas de diafragma | 2 bombas, 2 relés, LCD, 3 botones |
-| 06 | `06_Horno_ONOFF_DS18B20` | Horno ON/OFF con DS18B20 | DS18B20, foco, Peltier, extractor, relés, LCD |
-| 07 | `07_Horno_Peltier` | Horno con Peltier, disipadores y ventiladores | Peltier, 2 ventiladores, relés, 12 V |
-| 08 | `08_Dimmer_Servo` | Dimmer controlado con servo | Servo, dimmer MY-989, foco, LCD, 2 botones |
-| 09 | `09_Horno_LM35_Potenciometros` | Horno con LM35 y límites por potenciómetro | LM35, 2 potenciómetros, relés, LCD |
-| 10 | `10_Horno_LM35_Teclado` | Horno con LM35 y límites por teclado | LM35, teclado 4x4, relés, LCD, `Preferences` |
-| 11 | `11_Animatronico` | Animatrónico que grita | ESP32-C3, PIR, 3 servos, DFPlayer Mini, PAM8403 |
-| 12 | `12_Horno_Control_P` | Horno con control proporcional | DS18B20, teclado, servo + dimmer, LCD |
-| 13 | `13_Horno_Control_PID` | Horno con control PID | DS18B20, teclado, servo + dimmer, LCD |
-
-> 📝 Ajusta los nombres y el orden de la tabla a como tengas numeradas tus prácticas.
+| 01 | `01_LED_Motor_Foco` | Las tres primeras prácticas con ESP32: LED, motor y foco | LED, motor con transistor, foco con relé, botones |
+| 02 | `02_Control_Agua` | Control de agua | 2 bombas de diafragma, 2 relés, LCD, 3 botones |
+| 03 | `03_Horno_Botones` | Horno con botones | DS18B20, foco, Peltier, extractor, relés, LCD, botones |
+| 04 | `04_Dimmer` | Dimmer controlado con servo | Servo, dimmer MY-989, foco, LCD, 2 botones |
+| 05 | `05_Horno_Potenciometros` | Horno con potenciómetros | LM35, 2 potenciómetros, relés, LCD |
+| 06 | `06_Horno_Teclado_4x4` | Horno con teclado matricial 4x4 | LM35, teclado 4x4, relés, LCD, `Preferences` |
+| 07 | `07_Animatronico` | Animatrónico que grita | ESP32-C3, sensor PIR, 3 servos, DFPlayer Mini, PAM8403, bocinas |
+| 08 | `08_Control_P_Horno` | Control P del horno | DS18B20, teclado 4x4, servo + dimmer, LCD |
+| 09 | `09_Control_PID_Horno` | Control PID del horno | DS18B20, teclado 4x4, servo + dimmer, LCD |
 
 ---
 
@@ -91,16 +82,16 @@ Cada práctica declara sus librerías en su `platformio.ini`, dentro de `lib_dep
 
 | Librería | Se usa en |
 |---|---|
-| `marcoschwartz/LiquidCrystal_I2C` | Prácticas con LCD (05, 06, 07, 08, 09, 10, 12, 13) |
-| `chris--a/Keypad` | Teclado 4x4 (10, 12, 13) |
-| `madhephaestus/ESP32Servo` | Servomotores (08, 11, 12, 13) |
-| `paulstoffregen/OneWire` | DS18B20 (06, 07, 12, 13) |
-| `milesburton/DallasTemperature` | DS18B20 (06, 07, 12, 13) |
-| `dfrobot/DFRobotDFPlayerMini` | Audio (11) |
+| `marcoschwartz/LiquidCrystal_I2C` | Prácticas con LCD: 02, 03, 04, 05, 06, 08, 09 |
+| `chris--a/Keypad` | Teclado 4x4: 06, 08, 09 |
+| `madhephaestus/ESP32Servo` | Servomotores: 04, 07, 08, 09 |
+| `paulstoffregen/OneWire` | DS18B20: 03, 08, 09 |
+| `milesburton/DallasTemperature` | DS18B20: 03, 08, 09 |
+| `dfrobot/DFRobotDFPlayerMini` | Audio: 07 |
 
-`Wire`, `Preferences` y `Arduino.h` ya vienen incluidas en el framework y no se declaran.
+`Wire`, `Preferences` y `Arduino.h` ya vienen incluidas en el framework y no se declaran. El LM35 (prácticas 05 y 06) se lee con una entrada analógica y no necesita librería.
 
-**Ejemplo de `platformio.ini`** (horno con control PID):
+**Ejemplo de `platformio.ini`** (práctica 09, control PID):
 
 ```ini
 [env:esp32dev]
@@ -116,7 +107,7 @@ lib_deps =
     madhephaestus/ESP32Servo
 ```
 
-> ⚠️ La práctica del animatrónico usa un **ESP32-C3**, por lo que su `platformio.ini` cambia de placa (`esp32-c3-devkitm-1`) y usa otras banderas de compilación. Revisa el de su carpeta.
+> ⚠️ La práctica 07 (animatrónico) usa un **ESP32-C3**, por lo que su `platformio.ini` cambia de placa (`esp32-c3-devkitm-1`) y lleva otras banderas de compilación. Revisa el de su carpeta.
 
 ---
 
@@ -128,25 +119,39 @@ Sistemas_Embebidos/
 ├── README.md
 ├── .gitignore
 │
-├── 00_Instalacion_Entorno/
-│   └── README.md
-│
-├── 01_Motor_Transistor/
+├── 01_LED_Motor_Foco/
 │   ├── README.md
 │   ├── platformio.ini
-│   ├── diagrama_conexiones.png
 │   └── src/
 │       └── main.cpp
 │
-├── 02_Rele_Foco/
+├── 02_Control_Agua/
+│   ├── README.md
+│   ├── platformio.ini
+│   └── src/
+│       └── main.cpp
+│
+├── 03_Horno_Botones/
 │   └── ...
 │
-├── ...
+├── 04_Dimmer/
+│   └── ...
 │
-└── 13_Horno_Control_PID/
+├── 05_Horno_Potenciometros/
+│   └── ...
+│
+├── 06_Horno_Teclado_4x4/
+│   └── ...
+│
+├── 07_Animatronico/
+│   └── ...
+│
+├── 08_Control_P_Horno/
+│   └── ...
+│
+└── 09_Control_PID_Horno/
     ├── README.md
     ├── platformio.ini
-    ├── diagrama_conexiones.png
     └── src/
         └── main.cpp
 ```
@@ -158,7 +163,6 @@ Sistemas_Embebidos/
 | `README.md` | Documentación de la práctica |
 | `platformio.ini` | Placa, framework y librerías |
 | `src/main.cpp` | Código del programa |
-| `diagrama_conexiones.png` | Esquema de conexiones |
 
 ---
 
@@ -199,12 +203,13 @@ pio device monitor      # monitor serial
 
 Las prácticas del horno forman una secuencia que permite comparar estrategias de control:
 
-| Etapa | Práctica | Estrategia | Actuador |
-|---|---|---|---|
-| 1 | 06 y 07 | ON/OFF con histéresis | Relés |
-| 2 | 09 y 10 | ON/OFF con límites ajustables (potenciómetros y teclado) | Relés |
-| 3 | 12 | Control **proporcional (P)** | Servo + dimmer |
-| 4 | 13 | Control **PID** con anti-windup | Servo + dimmer |
+| Etapa | Práctica | Estrategia | Sensor | Actuador |
+|---|---|---|---|---|
+| 1 | 03 Horno con botones | ON/OFF con histéresis | DS18B20 | Relés |
+| 2 | 05 Horno con potenciómetros | ON/OFF con límites ajustables (potenciómetros) | LM35 | Relés |
+| 3 | 06 Horno con teclado 4x4 | ON/OFF con límites ajustables (teclado) | LM35 | Relés |
+| 4 | 08 Control P | Control **proporcional (P)** | DS18B20 | Servo + dimmer |
+| 5 | 09 Control PID | Control **PID** con anti-windup | DS18B20 | Servo + dimmer |
 
 Con el monitor serial del PID se puede guardar un registro en CSV y graficar la respuesta del sistema en Excel.
 
@@ -252,7 +257,6 @@ Thumbs.db
 * [ ] `src/main.cpp` compila sin errores.
 * [ ] `platformio.ini` con las librerías necesarias.
 * [ ] `README.md` con descripción, materiales, conexiones y pruebas.
-* [ ] Diagrama de conexiones incluido.
 * [ ] Probada en hardware físico.
 * [ ] Sin archivos `.pio/` ni `.vscode/` en el repositorio.
 
@@ -265,11 +269,3 @@ Al terminar las prácticas, el estudiante será capaz de:
 > **Diseñar, programar, documentar y probar sistemas embebidos basados en ESP32 que integren sensores, actuadores, interfaces de usuario y estrategias de control, aplicando buenas prácticas de seguridad y control de versiones.**
 
 ---
-
-## 👨‍🏫 Sistemas Embebidos
-
-**ESP32 · PlatformIO · Arduino · GitHub**
-
-**Autor:** _(escribe aquí tu nombre y grupo)_
-
-**Licencia:** proyecto con fines educativos bajo licencia **MIT**.
