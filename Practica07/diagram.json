@@ -1,1 +1,110 @@
-
+{
+  "version": 1,
+  "author": "Gael Salinas Aranda",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "board-esp32-c3-devkitm-1", "id": "esp", "top": 0, "left": 0, "attrs": {} },
+    {
+      "type": "wokwi-resistor",
+      "id": "r1",
+      "top": 99.95,
+      "left": 124.8,
+      "attrs": { "value": "220" }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led1",
+      "top": 25.2,
+      "left": 196.2,
+      "attrs": { "color": "red", "flip": "1" }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r2",
+      "top": 61.55,
+      "left": 124.8,
+      "attrs": { "value": "220" }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led2",
+      "top": 63.6,
+      "left": 195.8,
+      "attrs": { "color": "red", "flip": "1" }
+    },
+    { "type": "wokwi-gnd", "id": "gnd1", "top": 124.8, "left": 239.4, "attrs": {} },
+    { "type": "wokwi-microsd-card", "id": "sd1", "top": -114.97, "left": 9.67, "attrs": {} },
+    {
+      "type": "wokwi-pir-motion-sensor",
+      "id": "pir1",
+      "top": -72.8,
+      "left": -112.98,
+      "attrs": {}
+    },
+    { "type": "wokwi-servo", "id": "servo1", "top": 190, "left": 134.4, "attrs": {} },
+    {
+      "type": "wokwi-servo",
+      "id": "servo2",
+      "top": 189.2,
+      "left": -227.6,
+      "rotate": 180,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-servo",
+      "id": "servo3",
+      "top": 83.6,
+      "left": -227.6,
+      "rotate": 180,
+      "attrs": {}
+    },
+    { "type": "wokwi-vcc", "id": "vcc1", "top": 287.04, "left": -19, "rotate": 180, "attrs": {} },
+    { "type": "wokwi-gnd", "id": "gnd2", "top": 288, "left": -48.6, "attrs": {} },
+    {
+      "type": "wokwi-buzzer",
+      "id": "bz1",
+      "top": -89.1,
+      "left": 186.9,
+      "rotate": 90,
+      "attrs": { "volume": "0.1" }
+    },
+    {
+      "type": "wokwi-buzzer",
+      "id": "bz2",
+      "top": -156.3,
+      "left": 186.9,
+      "rotate": 90,
+      "attrs": { "volume": "0.1" }
+    }
+  ],
+  "connections": [
+    [ "esp:TX", "$serialMonitor:RX", "", [] ],
+    [ "esp:RX", "$serialMonitor:TX", "", [] ],
+    [ "esp:7", "r1:1", "green", [ "h0" ] ],
+    [ "esp:8", "r2:1", "green", [ "h0" ] ],
+    [ "r2:2", "led1:A", "green", [ "v0" ] ],
+    [ "r1:2", "led2:A", "green", [ "v0" ] ],
+    [ "led1:C", "gnd1:GND", "black", [ "v0", "h18.8" ] ],
+    [ "led2:C", "gnd1:GND", "black", [ "v0", "h28.8" ] ],
+    [ "pir1:OUT", "esp:3", "green", [ "v0" ] ],
+    [ "servo3:PWM", "esp:0", "green", [ "h28.8", "v-38.6" ] ],
+    [ "servo2:PWM", "esp:1", "green", [ "h38.4", "v-134.6" ] ],
+    [ "servo1:PWM", "esp:6", "green", [ "h-28.8", "v-163" ] ],
+    [ "sd1:GND", "esp:GND.9", "black", [ "h38.4", "v134.51" ] ],
+    [ "sd1:CS", "esp:RX", "green", [ "h19.2", "v86.46" ] ],
+    [ "sd1:DI", "esp:TX", "green", [ "h28.8", "v86.31" ] ],
+    [ "sd1:VCC", "bz1:2", "red", [ "h57.6", "v9.74" ] ],
+    [ "sd1:SCK", "bz1:1", "green", [ "h67.2", "v-0.01" ] ],
+    [ "sd1:DO", "bz2:2", "red", [ "h67.2", "v-19.09" ] ],
+    [ "sd1:CD", "bz2:1", "green", [ "h57.6", "v-19.2" ] ],
+    [ "pir1:VCC", "esp:3V3.2", "red", [ "v0" ] ],
+    [ "pir1:GND", "esp:GND.1", "black", [ "h61.12" ] ],
+    [ "servo3:V+", "gnd2:GND", "red", [ "h0" ] ],
+    [ "servo2:V+", "gnd2:GND", "red", [ "h0" ] ],
+    [ "servo1:V+", "gnd2:GND", "red", [ "h0" ] ],
+    [ "servo2:GND", "vcc1:VCC", "black", [ "h0" ] ],
+    [ "servo3:GND", "vcc1:VCC", "black", [ "h0" ] ],
+    [ "servo1:GND", "vcc1:VCC", "black", [ "h0" ] ]
+  ],
+  "dependencies": {}
+}
