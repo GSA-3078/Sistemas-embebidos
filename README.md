@@ -1,94 +1,275 @@
-# Sistemas-embebidos
-# 📚 1. Introducción
+# 🚀 Sistemas Embebidos – Prácticas con ESP32
 
-En el estudio de los Sistemas Embebidos modernos, el desarrollo de aplicaciones basadas en el microcontrolador ESP32 requiere un entorno de trabajo sólido, escalable y flexible. Para optimizar el ciclo de desarrollo, se implementa una arquitectura de herramientas integrada que abarca desde la escritura del código y la compilación, hasta la simulación de circuitos y el control de versiones.
+![ESP32](https://img.shields.io/badge/ESP32-DevKit%20V1-blue?logo=espressif)
+![ESP32-C3](https://img.shields.io/badge/ESP32--C3-Super%20Mini-red?logo=espressif)
+![PlatformIO](https://img.shields.io/badge/PlatformIO-IDE-orange?logo=platformio)
+![Arduino](https://img.shields.io/badge/Framework-Arduino-teal?logo=arduino)
+![VS Code](https://img.shields.io/badge/Visual%20Studio%20Code-IDE-blue?logo=visualstudiocode)
+![GitHub](https://img.shields.io/badge/GitHub-Version%20Control-black?logo=github)
 
-Este documento presenta la estructura, componentes y metodología de trabajo con la que se abordarán las prácticas del curso, utilizando un ecosistema compuesto por Visual Studio Code, PlatformIO, Arduino Framework, Wokwi, Git y GitHub.
-SISTEMAS EMBEBIDOS (ESP32)
+---
 
-                             │
-                             ▼
-                    Visual Studio Code
-                             │
-                    ┌────────┴────────┐
-                    │                 │
-                    ▼                 ▼
-               PlatformIO           Wokwi
-                    │                 │
-                 Compilar          Simular
-                    │                 │
-                    └────────┬────────┘
-                             ▼
-                          ESP32
-                             │
-                             ▼
-                          GitHub
-# 🎯 2. Objetivos
-Como estudiante de la asignatura, los objetivos al utilizar este entorno de desarrollo son:
+## 📚 1. Introducción
 
-- Desarrollar y estructurar proyectos para el microcontrolador ESP32 utilizando C++ y el framework de Arduino.
+Este repositorio reúne las **prácticas de la asignatura de Sistemas Embebidos**, desarrolladas con **ESP32** y programadas en **C++ con el framework Arduino** usando **PlatformIO** en Visual Studio Code.
 
-- Compilar y gestionar dependencias de forma eficiente mediante PlatformIO.
+Las prácticas van de lo sencillo a lo complejo: primero se controlan cargas simples (un motor, un foco) con transistores y relés, después se construyen sistemas de control de temperatura con sensores, pantalla LCD y teclado, hasta llegar a un **control PID** de un horno.
 
-- Validar y simular esquemas electrónicos y código en tiempo real con Wokwi antes de realizar el montaje físico.
+Cada práctica tiene su propia carpeta con su código, su configuración de PlatformIO, su diagrama de conexiones y su documentación.
 
-- Interactuar con periféricos y sensores (virtuales y físicos) analizando señales e interfaces de comunicación (GPIO, ADC, PWM, I2C, etc.).
+```text
+                    SISTEMAS EMBEBIDOS
+                            │
+                            ▼
+        ┌───────────────────┴───────────────────┐
+        │                                       │
+        ▼                                       ▼
+  Salidas y potencia                   Control y sensores
+  (transistor, relé)           (temperatura, nivel, teclado)
+        │                                       │
+        ▼                                       ▼
+   Motor · Foco             ON/OFF ──► P ──► PID · Dimmer
+```
 
-- Implementar control de versiones y respaldo continuo de prácticas mediante Git y GitHub.
+---
 
-- Desplegar aplicaciones en hardware real garantizando que el código probado en simulación sea ejecutable directamente en el ESP32 físico.
+## 🎯 2. Objetivo
 
-| Herramienta &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Tipo &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Función Principal en el Flujo de Trabajo |
-| :--- | :--- | :--- |
-| <br>**Visual Studio Code**<br>&nbsp; | <br>Editor / IDE<br>&nbsp; | <br>Editor de código fuente y centro de integración de extensiones.<br>&nbsp; |
-| <br>**PlatformIO IDE**<br>&nbsp; | <br>Extensión / Entorno<br>&nbsp; | <br>Gestión de proyectos, compilación, librerías y carga a placa.<br>&nbsp; |
-| <br>**Arduino Framework**<br>&nbsp; | <br>Framework<br>&nbsp; | <br>API de desarrollo para la programación del ESP32 en C/C++.<br>&nbsp; |
-| <br>**Wokwi for VS Code**<br>&nbsp; | <br>Simulador<br>&nbsp; | <br>Simulación interactiva de componentes electrónicos y microcontrolador.<br>&nbsp; |
-| <br>**Git**<br>&nbsp; | <br>CLI / Herramienta<br>&nbsp; | <br>Control de versiones local para el rastreo de cambios en los proyectos.<br>&nbsp; |
-| <br>**GitHub**<br>&nbsp; | <br>Plataforma Web<br>&nbsp; | <br>Respaldo remoto, documentación y entrega de prácticas del curso.<br>&nbsp; |
+Aplicar los fundamentos de los sistemas embebidos mediante prácticas que permitan al estudiante:
 
-# 🔄 5. Flujo de Trabajo Metodológico
-El proceso de desarrollo de cada práctica sigue una metodología iterativa dividida en tres etapas clave: Desarrollo, Simulación e Implementación Física.
+1. 🔌 Controlar cargas con transistores y módulos de relé.
+2. 🌡️ Leer sensores analógicos y digitales (LM35, DS18B20, PIR).
+3. 🖥️ Mostrar información en una pantalla LCD 16x2 con I2C.
+4. ⌨️ Capturar datos con botones y con un teclado matricial 4x4.
+5. 💾 Guardar configuración en memoria no volátil (`Preferences`).
+6. ⚙️ Controlar servomotores y regular potencia con un dimmer.
+7. 🎛️ Implementar control ON/OFF con histéresis, proporcional (P) y PID.
+8. 🔊 Reproducir audio con un DFPlayer Mini y un amplificador.
+9. 📝 Documentar cada práctica y respaldarla en GitHub.
 
-     ┌─────────────┐
-     │ src/main.cpp│
-     └──────┬──────┘
-            │
-            ▼
-     ┌─────────────┐
-     │ PlatformIO  │ ──► [Build / Compilación]
-     └──────┬──────┘
-            │
-            ▼
-    firmware.bin / ELF
-            │
-            ▼
-     ┌─────────────┐
-     │    Wokwi    │ ──► [Simulación y Validación]
-     └──────┬──────┘
-            │
-            ▼
-    ┌───────────────┐
-    │  ESP32 Físico │ ──► [Carga e Implementación Real]
-    └───────────────┘
-    
-1. Programación: Edición del código en src/main.cpp e inclusión de dependencias en platformio.ini.
+---
 
-2. Compilación: Verificación del código mediante el comando de compilación de PlatformIO (pio run).
+## 🧰 3. Herramientas
 
-3. Simulación: Ejecución del firmware en Wokwi cargando el circuito definido en diagram.json para verificar señales, displays y lógica de control.
+| Herramienta | Función |
+|---|---|
+| Visual Studio Code | Entorno de desarrollo |
+| PlatformIO IDE | Compilación, librerías y carga al ESP32 |
+| Arduino Framework | Framework de programación |
+| Git y GitHub | Control de versiones y respaldo |
 
-4. Versionado: Subida del código fuente y configuraciones a GitHub omitiendo binarios.
+> 💡 Si todavía no tienes el entorno listo, consulta la carpeta `00_Instalacion_Entorno`.
 
-5. Transferencia a Hardware: Carga del binario compilado al ESP32 físico para validación final.
+---
 
-# 🧠 7. Filosofía de Trabajo
-Durante el desarrollo de las actividades de la materia, se adopta el siguiente principio operativo:
-> **PlatformIO** administra el código y la compilación.  
-> **Wokwi** administra la simulación del circuito.  
-> **GitHub** administra el control de versiones y el respaldo.
+## 🧪 4. Lista de prácticas
 
-De esta manera, cada solución desarrollada es completamente reproducible, portátil y fácil de documentar antes de realizar pruebas en componentes electrónicos reales.
+| # | Carpeta | Práctica | Componentes principales |
+|:-:|---|---|---|
+| 00 | `00_Instalacion_Entorno` | Instalación y configuración del entorno | VS Code, PlatformIO, GitHub |
+| 01 | `01_Motor_Transistor` | Control de un motor con transistor | Motor, transistor, 2 botones |
+| 02 | `02_Rele_Foco` | Control de un foco con relé | Relé, foco, 2 botones |
+| 03 | `03_Rele_Fisico` | Relé con el módulo físico | Módulo de relé, foco |
+| 04 | `04_Rele_2N2222` | Activación del relé con transistor 2N2222 | 2N2222, módulo de relé |
+| 05 | `05_Control_Nivel_Bombas` | Control de nivel con bombas de diafragma | 2 bombas, 2 relés, LCD, 3 botones |
+| 06 | `06_Horno_ONOFF_DS18B20` | Horno ON/OFF con DS18B20 | DS18B20, foco, Peltier, extractor, relés, LCD |
+| 07 | `07_Horno_Peltier` | Horno con Peltier, disipadores y ventiladores | Peltier, 2 ventiladores, relés, 12 V |
+| 08 | `08_Dimmer_Servo` | Dimmer controlado con servo | Servo, dimmer MY-989, foco, LCD, 2 botones |
+| 09 | `09_Horno_LM35_Potenciometros` | Horno con LM35 y límites por potenciómetro | LM35, 2 potenciómetros, relés, LCD |
+| 10 | `10_Horno_LM35_Teclado` | Horno con LM35 y límites por teclado | LM35, teclado 4x4, relés, LCD, `Preferences` |
+| 11 | `11_Animatronico` | Animatrónico que grita | ESP32-C3, PIR, 3 servos, DFPlayer Mini, PAM8403 |
+| 12 | `12_Horno_Control_P` | Horno con control proporcional | DS18B20, teclado, servo + dimmer, LCD |
+| 13 | `13_Horno_Control_PID` | Horno con control PID | DS18B20, teclado, servo + dimmer, LCD |
 
-# 🎓 8. Competencia a Desarrollar
-Al hacer uso de este entorno, se adquiere la capacidad de operar un ecosistema profesional de desarrollo para sistemas embebidos, aplicando buenas prácticas de desarrollo de software, simulación previa de hardware y control de versiones, optimizando los tiempos de diseño y minimizando riesgos de daño en componentes físicos.
+> 📝 Ajusta los nombres y el orden de la tabla a como tengas numeradas tus prácticas.
+
+---
+
+## 📦 5. Librerías por práctica
+
+Cada práctica declara sus librerías en su `platformio.ini`, dentro de `lib_deps`. Al clonar el proyecto, PlatformIO las instala automáticamente.
+
+| Librería | Se usa en |
+|---|---|
+| `marcoschwartz/LiquidCrystal_I2C` | Prácticas con LCD (05, 06, 07, 08, 09, 10, 12, 13) |
+| `chris--a/Keypad` | Teclado 4x4 (10, 12, 13) |
+| `madhephaestus/ESP32Servo` | Servomotores (08, 11, 12, 13) |
+| `paulstoffregen/OneWire` | DS18B20 (06, 07, 12, 13) |
+| `milesburton/DallasTemperature` | DS18B20 (06, 07, 12, 13) |
+| `dfrobot/DFRobotDFPlayerMini` | Audio (11) |
+
+`Wire`, `Preferences` y `Arduino.h` ya vienen incluidas en el framework y no se declaran.
+
+**Ejemplo de `platformio.ini`** (horno con control PID):
+
+```ini
+[env:esp32dev]
+platform = espressif32
+board = esp32dev
+framework = arduino
+monitor_speed = 115200
+lib_deps =
+    marcoschwartz/LiquidCrystal_I2C
+    chris--a/Keypad
+    milesburton/DallasTemperature
+    paulstoffregen/OneWire
+    madhephaestus/ESP32Servo
+```
+
+> ⚠️ La práctica del animatrónico usa un **ESP32-C3**, por lo que su `platformio.ini` cambia de placa (`esp32-c3-devkitm-1`) y usa otras banderas de compilación. Revisa el de su carpeta.
+
+---
+
+## 📁 6. Estructura del repositorio
+
+```text
+Sistemas_Embebidos/
+│
+├── README.md
+├── .gitignore
+│
+├── 00_Instalacion_Entorno/
+│   └── README.md
+│
+├── 01_Motor_Transistor/
+│   ├── README.md
+│   ├── platformio.ini
+│   ├── diagrama_conexiones.png
+│   └── src/
+│       └── main.cpp
+│
+├── 02_Rele_Foco/
+│   └── ...
+│
+├── ...
+│
+└── 13_Horno_Control_PID/
+    ├── README.md
+    ├── platformio.ini
+    ├── diagrama_conexiones.png
+    └── src/
+        └── main.cpp
+```
+
+### 📄 Contenido de cada práctica
+
+| Archivo | Función |
+|---|---|
+| `README.md` | Documentación de la práctica |
+| `platformio.ini` | Placa, framework y librerías |
+| `src/main.cpp` | Código del programa |
+| `diagrama_conexiones.png` | Esquema de conexiones |
+
+---
+
+## ▶️ 7. Cómo abrir y cargar una práctica
+
+1. **Clona** el repositorio o descárgalo como ZIP.
+2. Abre **VS Code** y selecciona `File → Open Folder`.
+3. Abre la **carpeta de la práctica** (no la carpeta general), porque ahí está su `platformio.ini`.
+4. Espera a que PlatformIO instale las librerías.
+5. Compila con **Build** (✔).
+6. Conecta el ESP32 por USB y carga con **Upload** (→).
+7. Abre el **Monitor Serial** (🔌) a la velocidad indicada en `monitor_speed`.
+
+```bash
+pio run                 # compilar
+pio run -t upload       # cargar al ESP32
+pio device monitor      # monitor serial
+```
+
+---
+
+## 🔌 8. Convenciones usadas
+
+| Tema | Convención |
+|---|---|
+| Placa principal | ESP32 DevKit de 30 pines (el animatrónico usa ESP32-C3) |
+| Módulos de relé | **Activos en LOW** (`LOW` = encendido) |
+| LCD I2C | Dirección `0x27`, SDA en GPIO21 y SCL en GPIO22 |
+| Alimentación de servos | 5 V, con GND común con el ESP32 |
+| Cargas de 12 V | Fuente externa conmutada con módulos de relé |
+| Carga de 127 V CA | Solo por contactos de relé o dimmer |
+| Teclado 4x4 | Filas en GPIO13, 14, 27, 26 · columnas en GPIO25, 33, 32, 23 |
+| Monitor serial | 115200 baudios (salvo que la práctica indique otra velocidad) |
+
+---
+
+## 📈 9. Evolución de las prácticas de temperatura
+
+Las prácticas del horno forman una secuencia que permite comparar estrategias de control:
+
+| Etapa | Práctica | Estrategia | Actuador |
+|---|---|---|---|
+| 1 | 06 y 07 | ON/OFF con histéresis | Relés |
+| 2 | 09 y 10 | ON/OFF con límites ajustables (potenciómetros y teclado) | Relés |
+| 3 | 12 | Control **proporcional (P)** | Servo + dimmer |
+| 4 | 13 | Control **PID** con anti-windup | Servo + dimmer |
+
+Con el monitor serial del PID se puede guardar un registro en CSV y graficar la respuesta del sistema en Excel.
+
+---
+
+## ⚠️ 10. Seguridad
+
+Varias prácticas trabajan con **127 V de corriente alterna** (foco, dimmer) y con **12 V de corriente alta** (Peltier y ventiladores):
+
+- 🚫 Arma y modifica los circuitos siempre **desconectados**.
+- 📦 Deja las conexiones de 127 V dentro de una **caja cerrada** y aislada.
+- 🔥 No dejes el horno funcionando sin supervisión.
+- 🧯 Verifica que relés, dimmer y cables soporten la corriente de la carga.
+- ⚡ No alimentes servos ni cargas de potencia desde un GPIO.
+
+---
+
+## 🚫 11. Archivos que no se suben
+
+El `.gitignore` excluye los archivos generados automáticamente:
+
+```gitignore
+# PlatformIO
+.pio/
+.piolibdeps/
+
+# Visual Studio Code
+.vscode/
+
+# Archivos compilados
+*.bin
+*.elf
+*.hex
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+```
+
+---
+
+## 📋 12. Checklist antes de entregar una práctica
+
+* [ ] Carpeta con nombre numerado.
+* [ ] `src/main.cpp` compila sin errores.
+* [ ] `platformio.ini` con las librerías necesarias.
+* [ ] `README.md` con descripción, materiales, conexiones y pruebas.
+* [ ] Diagrama de conexiones incluido.
+* [ ] Probada en hardware físico.
+* [ ] Sin archivos `.pio/` ni `.vscode/` en el repositorio.
+
+---
+
+## 🧠 13. Competencia desarrollada
+
+Al terminar las prácticas, el estudiante será capaz de:
+
+> **Diseñar, programar, documentar y probar sistemas embebidos basados en ESP32 que integren sensores, actuadores, interfaces de usuario y estrategias de control, aplicando buenas prácticas de seguridad y control de versiones.**
+
+---
+
+## 👨‍🏫 Sistemas Embebidos
+
+**ESP32 · PlatformIO · Arduino · GitHub**
+
+**Autor:** _(escribe aquí tu nombre y grupo)_
+
+**Licencia:** proyecto con fines educativos bajo licencia **MIT**.
