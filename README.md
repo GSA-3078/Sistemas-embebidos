@@ -269,3 +269,36 @@ Al terminar las prácticas, el estudiante será capaz de:
 > **Diseñar, programar, documentar y probar sistemas embebidos basados en ESP32 que integren sensores, actuadores, interfaces de usuario y estrategias de control, aplicando buenas prácticas de seguridad y control de versiones.**
 
 ---
+
+## 👥 Equipo de trabajo
+
+<div align="center">
+
+### 🎓 Sistemas Embebidos
+
+**Institución:** Universidad Politecnica del bicentenario
+**Grupo:** 701 &nbsp;|&nbsp;
+
+</div>
+
+### 🧑‍💻 Integrantes
+
+| No. | Nombre completo |
+|:---:|---|
+| 1 | **Gael Salinas Aranda** |
+| 2 | **Gabriel Isaías León Robles** |
+| 3 | **Alan Javier Díaz Sánchez** |
+| 4 | **Moises Israel Diaz Ornelas** |
+
+### 👨‍🏫 Profesor
+
+| | |
+|---|---|
+| **Docente** | Hugo Antonio Méndez Guzmán |
+| **Asignatura** | Sistemas Embebidos |
+
+### 🙏 Agradecimientos
+
+Agradecemos al profesor **Hugo Antonio Méndez Guzmán** por su guía, su material y su apoyo durante el desarrollo de las prácticas y proyectos de esta asignatura.
+
+---
