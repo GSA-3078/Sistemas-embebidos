@@ -277,7 +277,7 @@ Al terminar las prácticas, el estudiante será capaz de:
 ### 🎓 Sistemas Embebidos
 
 **Institución:** Universidad Politecnica del bicentenario
-**Grupo:** 701 &nbsp;|&nbsp;
+**Grupo:** 701
 
 </div>
 
@@ -299,6 +299,6 @@ Al terminar las prácticas, el estudiante será capaz de:
 
 ### 🙏 Agradecimientos
 
-Agradecemos al profesor **Hugo Antonio Méndez Guzmán** por su guía, su material y su apoyo durante el desarrollo de las prácticas y proyectos de esta asignatura.
+Agradecemos al profesor **Hugo Antonio Méndez Guzmán** por su guía, su material didactico y su apoyo durante el desarrollo de las prácticas y proyectos de esta asignatura.
 
 ---
